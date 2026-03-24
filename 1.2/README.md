@@ -1,6 +1,6 @@
-![pod.yaml](https://github.com/jaack1/netology-kuber/blob/main/1.2/pod.yaml)
+[pod.yaml](https://github.com/jaack1/netology-kuber/blob/main/1.2/pod.yaml)
 
-![service.yaml](https://github.com/jaack1/netology-kuber/blob/main/1.2/service.yaml)
+[service.yaml](https://github.com/jaack1/netology-kuber/blob/main/1.2/service.yaml)
 
 ![Image alt](https://github.com/jaack1/netology-kuber/blob/main/1.2/screenshots/1.png)
 
