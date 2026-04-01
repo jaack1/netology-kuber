@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netology-backend
+  labels:
+    task: two
+  annotations:
+    container: multitool
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      type: backend 
+  template:
+    metadata:
+      labels:
+        app: multitool
+        type: backend
+    spec:
+      containers:
+        - name: multitool
+          image: praqma/network-multitool:alpine-extra
+          env:
+            - name: HTTP_PORT
+              value: "8080"
+            - name: HTTPS_PORT
+              value: "8443"
+          ports:
+            - name: http-multitool
+              containerPort: 8080
+              protocol: TCP
+            - name: https-multitool
+              containerPort: 8443
+              protocol: TCP
+      initContainers:
+        - name: busybox
+          image: busybox:1.36.1
+          env:
+            - name: TARGET
+              value: "netology-backend"
+          command: ['sh', '-c', "until nslookup $TARGET.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do sleep 2; done"]

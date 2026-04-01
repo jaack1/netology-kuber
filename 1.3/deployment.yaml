@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netology-deployment
+  labels:
+    task: first
+  annotations:
+    container1: nginx
+    container2: multitools
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: nginx-multitool
+  template:
+    metadata:
+      labels:
+        app: nginx-multitool
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.24.0
+        ports:
+        - name: web
+          containerPort: 80
+      - name: multitool
+        image: praqma/network-multitool:alpine-extra
+        env:
+        - name: HTTP_PORT
+          value: "1181"
+        - name: HTTPS_PORT
+          value: "1443"
+        ports:
+        - name: http
+          containerPort: 1181
+          protocol: TCP
+        - name: https
+          containerPort: 1443
+          protocol: TCP

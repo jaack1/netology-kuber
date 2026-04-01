@@ -1,0 +1,29 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: netology-ingress
+  labels:
+    name: ingress-microk8s
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: netology-test
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: netology-frontend
+                port:
+                  name: nginx
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: netology-backend
+                port:
+                  name: multitool
