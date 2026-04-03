@@ -1,0 +1,74 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: netology-sc
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: test-pv
+spec:
+  capacity:
+    storage: 10Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: netology-sc
+  hostPath:
+    path:  /data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: netology-pvc
+spec:
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi
+  storageClassName: netology-sc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-exchange-sc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pv
+  template:
+    metadata:
+      labels:
+        app: pv
+    spec:
+      containers:
+      - name: writer
+        image: busybox
+        env:
+          - name: TARGET
+            value: "file-netology"
+        command: ["/bin/sh", "-c"] 
+        args: ["until false; do date >> /data/$TARGET.txt; sleep 5; done"]
+        volumeMounts:
+        - name:  test-vol-1
+          mountPath: "/data"
+      - name: reader
+        image: praqma/network-multitool:alpine-extra
+        env:
+          - name: TARGET
+            value: "file-netology"
+        command: ["/bin/sh", "-c"]
+        args: ["tail -f /data/$TARGET.txt"]
+        volumeMounts:
+        - name:  test-vol-1
+          mountPath: "/data"
+      volumes:
+      - name: test-vol-1
+        persistentVolumeClaim:
+          claimName: netology-pvc

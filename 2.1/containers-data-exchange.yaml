@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-exchange
+  labels:
+    task: one
+  annotations:
+    container1: multitool
+    container2: busybox
+  namespace: nl-task2-1
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      type: volume
+  template:
+    metadata:
+      labels:
+        app: multitool
+        type: volume
+    spec:
+      containers:
+        - name: multitool
+          image: praqma/network-multitool:alpine-extra
+          env:
+            - name: HTTP_PORT
+              value: "8080"
+            - name: HTTPS_PORT
+              value: "8443"
+          ports:
+            - name: http-multitool
+              containerPort: 8080
+              protocol: TCP
+            - name: https-multitool
+              containerPort: 8443
+              protocol: TCP
+          volumeMounts:
+            - name:  file
+              mountPath: "/data"
+        - name: writer
+          image: busybox:1.36.1
+          env:
+            - name: TARGET
+              value: "file-netology"
+          command: ['sh', '-c', "until false; do date >> /data/$TARGET.txt; sleep 5; done"]
+          volumeMounts:
+            - name:  file
+              mountPath: "/data"
+      volumes:
+        - name:  file
+          emptyDir: {}
