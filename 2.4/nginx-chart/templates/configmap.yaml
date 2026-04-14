@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-cm
+  labels:
+    app: {{ .Values.containers.name }}-page
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Хелло тхере! Айм юзе ConfigMap</title>
+    </head>
+    <body>
+      <h1>Привет от Kubernetes и Нетологии!</h1>
+    </body>
+    </html>

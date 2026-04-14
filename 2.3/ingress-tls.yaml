@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-ssl
+  namespace: nl-task2-3
+spec:
+  selector:
+    app: web-app
+  type: ClusterIP
+  ports:
+  - name: nginx
+    port: 80
+    targetPort: nginx-http
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: netology-ingress-ssl
+  labels:
+    type: ingress
+    ssl: enable
+    app: web-app
+  namespace: nl-task2-3
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: netology-test
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx-ssl
+              port:
+                name: nginx
+  tls:
+    - hosts:
+        - netology-test
+      secretName: secret-tls
