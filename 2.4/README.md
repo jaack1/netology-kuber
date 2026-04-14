@@ -1,6 +1,6 @@
 # Задание 1
 
-[nginx-chart-0.0.1.tar.yaml](https://github.com/jaack1/netology-kuber/blob/main/2.3/nginx-chart-0.0.1.tar.yaml)
+[nginx-chart-0.0.1.tar.yaml](https://github.com/jaack1/netology-kuber/blob/main/2.4/nginx-chart-0.0.1.tar.yaml)
 
 # Задание 2
 
