@@ -6,7 +6,7 @@
     - отсутствие описания nemespace в манифесте
     - обращение из `web-consumer` в `auth-db` по короткому имени сервиса, хотя они в разных namespace
     - Порты в контейнерах без имени.
-3. [Исправленный манифест](3.5/task.yaml)
+3. [Исправленный манифест](task.yaml)
     - Добавил создание двух **namespace** : `web` и `data`
     ```
     apiVersion: v1
@@ -28,4 +28,4 @@
       containerPort: 80
       protocol: TCP
     ```
-4. [Скриншот логов пода web-consumer после исправления](3.5/screenshots/1.jpg)
+4. [Скриншот логов пода web-consumer после исправления](screenshots/1.jpg)
