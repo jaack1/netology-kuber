@@ -28,4 +28,4 @@
       containerPort: 80
       protocol: TCP
     ```
-4. [Скриншот логов пода web-consumer после исправления](screenshots/1.jpg)
+4. [Скриншот логов пода web-consumer после исправления](screenshots/1.png)
